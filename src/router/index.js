@@ -9,6 +9,12 @@ const routes = [
         name: 'login',
         component: Login,
     },
+    // 추가
+    {
+        path: '/:pathMatch(.*)*',
+        name: 'NotFound',
+        component: () => import('@/views/NotFoundPage/NotFoundPage.vue'),
+    },
     {
         path: '/vue',
         name: 'vue',
