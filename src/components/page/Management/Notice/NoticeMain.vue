@@ -7,7 +7,7 @@ import Pagination from '../../../common/Pagination.vue';
 const route = useRoute();
 // 초기값 없음-null
 const noticeList = ref();
-const flag = ref(false);
+// const flag = ref(false);
 // 객체 뭐시기
 // 모달 컴포넌트와 같은 값을 참조하고 있음
 const modalState = useModalStore();
@@ -61,9 +61,9 @@ onMounted(() => {
 // route.query 반응형 데이터가 아님, 반응형 데이터가 들어가야 watch가 실행됨
 // watch(route.query, searchList);
 watch(() => route.query, searchList);
-watch(noticeId, () => {
-    console.log(noticeId.value);
-});
+// watch(noticeId, () => {
+//     console.log(noticeId.value);
+// });
 </script>
 <template>
     <div class="divNoticeList">
@@ -123,7 +123,7 @@ watch(noticeId, () => {
             </tbody>
         </table>
         <Pagination
-            :totalItems="noticeList?.noticeCnt"
+            :totalItems="noticeList?.noticeCnt || 0"
             :itemsPerPage="5"
             :maxPagesShown="5"
             :onClick="searchList"
@@ -131,8 +131,6 @@ watch(noticeId, () => {
         />
     </div>
 </template>
-
-<script setup></script>
 
 <style lang="scss" scoped>
 table {

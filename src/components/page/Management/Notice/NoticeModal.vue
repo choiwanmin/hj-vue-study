@@ -71,7 +71,7 @@ onUnmounted(() => {
 const modalState = useModalStore();
 </script>
 <template>
-    <!-- teleport body로 옮겨주세요 -->
+    <!-- teleport - body로 옮겨주세요 -->
     <teleport to="body">
         <div class="backdrop">
             <div class="container">

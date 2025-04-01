@@ -1,4 +1,4 @@
-<!-- setup을 적어야 Composition API를 사용할 수 있다.-->
+<!-- setup을 적어야 Composition API를 사용할 수 있다.  -->
 <script setup>
 import { ref } from 'vue';
 import router from '@/router';
@@ -22,7 +22,7 @@ const handlerSearch = () => {
     router.push(queryString);
 };
 
-// 새로고침시 quertParam만 없애고 싶어요
+// 새로고침시 queryParam만 없애고 싶어요
 // 로직
 // 1. 만약에, noticeSearch라는 컴포넌트가 열릴 때, url에 queryParam이 남아 있는지를 확인을 할겁니다.
 // 2. 남아 있는 경우, 경로(queryParam을 제외한 나머지)로 현재 url을 대체시킬겁니다.
@@ -44,8 +44,6 @@ onMounted(() => {
         <button @click="modalState.setModalState">신규등록</button>
     </div>
 </template>
-<!-- setup을 적어야 Composition API를 사용할 수 있다.  -->
-<script setup></script>
 
 <style lang="scss" scoped>
 .search-box {
