@@ -1,11 +1,86 @@
+<script setup>
+import { onMounted, onUnmounted } from 'vue';
+import { useModalStore } from '../../../../stores/modalState';
+import axios from 'axios';
+
+// 순서상 여기서 먼저 다음을 정의 이후 main에서 이에 맞게 맵핑
+// const props = defineProps(['id']);
+// console.log('props', props.id);
+//객체 분할 형식으로
+const { id } = defineProps(['id']);
+// console.log('props', id);
+
+// const emit = defineEmits(['modalClose']);
+const emit = defineEmits(['modalClose', 'postSuccess']);
+
+const noticeDetail = ref({});
+
+const searchDetail = () => {
+    axios
+        .post('/api/management/noticeDetailJson.do', { noticeId: id })
+        .then(res => {
+            noticeDetail.value = res.data.detailValue;
+        });
+};
+
+const noticeSave = () => {
+    const param = new URLSearchParams(noticeDetail.value);
+    axios.post('/api/management/noticeSave.do', param).then(res => {
+        if (res.data.result === 'success') {
+            emit('postSuccess');
+        }
+    });
+};
+
+const noticeUpdate = () => {
+    //양방향 바인딩
+    const param = new URLSearchParams(noticeDetail.value);
+    param.append('noticeId', id);
+    axios.post('/api/management/noticeUpdate.do', param).then(res => {
+        if (res.data.result === 'success') {
+            emit('postSuccess');
+        }
+    });
+};
+
+const noticeDelete = () => {
+    axios
+        .post('/api/management/noticeDeleteJson.do', { noticeId: id })
+        .then(res => {
+            if (res.data.result === 'success') {
+                emit('postSuccess');
+            }
+        });
+};
+
+// onBeforeMounted 돔이 열리 전 실행
+// onMounted 돔이 다 열리고 나서 실행
+onMounted(() => {
+    // id가 있으면 실행
+    id && searchDetail();
+});
+
+onUnmounted(() => {
+    // 자식에서 부모에게 요청을 보냄
+    // 이름이 같아야함
+    // 앞서 선언한 함수를 호출
+    // emit('modalClose');
+    emit('modalClose', 0);
+});
+
+const modalState = useModalStore();
+</script>
 <template>
+    <!-- teleport body로 옮겨주세요 -->
     <teleport to="body">
         <div class="backdrop">
             <div class="container">
-                <label> 제목 :<input type="text" /> </label>
+                <label>
+                    제목 :<input type="text" v-model="noticeDetail.title" />
+                </label>
                 <label>
                     내용 :
-                    <input type="text" />
+                    <input type="text" v-model="noticeDetail.content" />
                 </label>
                 파일 :<input type="file" style="display: none" id="fileInput" />
                 <label class="img-label" htmlFor="fileInput">
@@ -18,9 +93,12 @@
                     </div>
                 </div>
                 <div class="button-box">
-                    <button>저장</button>
-                    <button>삭제</button>
-                    <button>나가기</button>
+                    <!-- <button @click="noticeSave()">저장</button> -->
+                    <button @click="id ? noticeUpdate() : noticeSave()">
+                        {{ id ? '수정' : '저장' }}
+                    </button>
+                    <button v-if="id" @click="noticeDelete">삭제</button>
+                    <button @click="modalState.setModalState()">나가기</button>
                 </div>
             </div>
         </div>
